@@ -4,7 +4,8 @@
 node_modules/
 
 # Compiled output
-build
+www/dist/
+www/uploads/
 
 # Runtime data
 database.sqlite
