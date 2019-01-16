@@ -1,0 +1,11 @@
+const accountRouter = require('./account');
+// 社区动态
+const communityRouter = require('./community');
+// 员工信息
+const staffRoter = require('./staff');
+
+module.exports = function router(app) {
+  app.use('/account', accountRouter);
+  app.use('/community', communityRouter);
+  app.use('/staff', staffRoter);
+};

@@ -106,7 +106,7 @@ class PicturesWall extends React.Component {
     return (
       <div className="clearfix">
         <Upload
-          action="/uploadPic"
+          action="/community/uploadPic"
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview.bind(this)}
