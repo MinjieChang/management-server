@@ -10,11 +10,19 @@ module.exports = {
   },
   addTalks: {
     body: {
-      skip: joi.number().integer(),
-      limit: joi.number().integer(),
-      author: joiObjectId(joi)().required(),
+      // author: joiObjectId(joi)().required(),
       email: joi.string().required(),
       text: joi.string().required(),
+    },
+  },
+  getById: {
+    query: {
+      authorId: joiObjectId(joi)().required(),
+    },
+  },
+  removeById: {
+    body: {
+      id: joiObjectId(joi)().required(),
     },
   },
 };

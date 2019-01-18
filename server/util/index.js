@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { ERROR_CODE } = require('../constant');
 const { ClientError } = require('./errors');
 
@@ -43,9 +44,14 @@ const assertTruth = ({
   }
 };
 
+const toObjectId = _id => mongoose.Types.ObjectId(_id);
+const objIdToStr = _id => mongoose.Types.ObjectId(_id).toString();
+
 module.exports = {
   createErrorObj,
   castError,
   createRouteHandler,
   assertTruth,
+  toObjectId,
+  objIdToStr,
 };

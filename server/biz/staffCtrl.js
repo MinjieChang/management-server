@@ -1,13 +1,9 @@
-// 先将所有的数据拉取出来
-// app.get("/init",(req,res)=>{
-// 	fs.readFile("./db/staff.json",(err,data)=>{
-// 		var list = JSON.parse(data.toString()).list;
-// 		res.json({"data":list});
-// 	});
-// });
 const fs = require('fs');
 const formidable = require('formidable');
 const _ = require('underscore');
+const { createStaff } = require('../dao/staff');
+const { assertTruth } = require('../util');
+
 // 这个接口用来筛选数据
 exports.staffs = (req, res) => {
   fs.readFile('./db/staff.json', (err, data) => {
@@ -114,9 +110,11 @@ function addStaff(staff) {
 }
 
 // 添加员工的接口
-exports.add = (req, res) => {
-  const form = new formidable.IncomingForm();
-  form.parse(req, (err, fileds) => {
-    addStaff(fileds.newStaff);
+exports.add = async ({ ...staff }) => {
+  const savedS = await createStaff(staff);
+  assertTruth({
+    value: savedS,
+    message: 'save staff error',
   });
+  return { id: savedS._id };
 };

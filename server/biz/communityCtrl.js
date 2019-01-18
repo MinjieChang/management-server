@@ -1,78 +1,74 @@
 const formidable = require('formidable');
 const url = require('url');
 const path = require('path');
-const Talk = require('../models/Talk');
+const {
+  createTalk,
+  getTalkByAuthorId,
+  getTalks,
+  removeTalkById,
+} = require('../dao/talk');
+const { assertTruth, toObjectId } = require('../util');
 
 // var timeago = require("timeago.js");
-
 // var gm = require("gm");
-// var fs = require("fs");
 
 // 处理上传的图片
-exports.uploadPic = (req, res) => {
+exports.uploadPic = ({ req }) => {
   const form = new formidable.IncomingForm();
-  // 设置上传地址
   form.uploadDir = '../www/uploads/shuoshuopic';
-  form.parse(req, (err, fileds, files) => {
-    // fileds 是携带的参数 ； files是携带的文件
-    if (files.file.type != 'image/jpeg' && files.avatar.type != 'image/png') {
-      res.send('请传jpeg文件或者png文件！');
-      res.json({ result: -1 });
-      return;
-    }
-    const purepath = path.basename(url.parse(files.file.path).pathname);
-    const picPath = purepath;
-    res.json({ result: 1, picPath });
+  return new Promise(resolve => {
+    form.parse(req, (err, fileds, files) => {
+      if (
+        files.file.type !== 'image/jpeg' &&
+        files.avatar.type !== 'image/png'
+      ) {
+        resolve({ data: -1 });
+        return;
+      }
+      const purepath = path.basename(url.parse(files.file.path).pathname);
+      resolve({ result: 1, picPath: purepath });
+    });
   });
 };
 
 // 发帖
-exports.submitShuoShuo = (req, res) => {
-  const form = new formidable.IncomingForm();
-  form.parse(req, (err, fileds) => {
-    // const author = req.session.user._id;
-    console.log(req.session.user, 9999999);
-    const text = fileds.text;
-    const email = fileds.email;
-    const pathArr = fileds.pathArr ? JSON.parse(fileds.pathArr) : [];
-
-    const talk = new Talk({
-      text,
-      pathArr,
-      email,
-      date: new Date(),
-    });
-    // 存储
-    talk.save(err => {
-      res.json({ talk });
-    });
+exports.submitShuoShuo = async ({ text, user, pathArr }) => {
+  const savedTalk = await createTalk({
+    author: user._id,
+    text,
+    pathArr,
   });
+  assertTruth({
+    value: savedTalk && savedTalk.author,
+    message: 'server error',
+  });
+  return { id: savedTalk._id };
 };
 
-exports.init = (req, res) => {
-  // 获取talks数据库中的所有数据
-  Talk.find({})
-    .sort({ date: -1 })
-    .exec((err, docs) => {
-      res.json({ talks: docs });
-    });
+exports.getTalksByAuthorId = async ({ authorId }) => {
+  const talks = await getTalkByAuthorId(authorId);
+  assertTruth({
+    value: talks,
+    message: 'db read error',
+  });
+  return { data: talks };
+};
+
+exports.init = async () => {
+  const talks = await getTalks();
+  assertTruth({
+    value: talks,
+    message: 'server error',
+  });
+  return { data: talks };
 };
 
 // 删帖
-exports.removeTalk = (req, res) => {
-  // 获取talks数据库中的所有数据
-  const form = new formidable.IncomingForm();
-  form.parse(req, (err, fileds) => {
-    // 从数据库中查找所有的数据
-    const id = fileds.id;
-    Talk.remove({ _id: id }, (err, n) => {
-      if (err) {
-        console.log('删除失败');
-        res.json({ result: -1 });
-        return;
-      }
-      res.json({ result: 1 });
-      console.log('删除成功');
-    });
+exports.removeTalk = async ({ id }) => {
+  const removedTalk = await removeTalkById(id);
+  assertTruth({
+    value: removedTalk,
+    message: 'db error remove failed',
   });
+  return { id: removedTalk._id };
 };

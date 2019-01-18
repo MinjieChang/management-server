@@ -3,7 +3,7 @@ const validate = require('express-validation');
 const accountCtrl = require('../biz/accountCtrl');
 const { login, register } = require('./validation/account');
 const { createRouteHandler } = require('../util');
-const { checkLogin } = require('../middleware/check.js');
+const { checkLogin, checkNotLogin } = require('../middleware/check.js');
 
 const accountRouter = new express.Router();
 
@@ -19,6 +19,7 @@ accountRouter.post(
 // 用户登录
 accountRouter.post(
   '/login',
+  // checkNotLogin,
   validate(login),
   createRouteHandler(({ body: { email, password }, session }) =>
     accountCtrl.login({ email, password, session }),

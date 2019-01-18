@@ -15,6 +15,7 @@ function addCreatedAt(schema, options) {
 }
 
 module.exports = function connectMongodb() {
+  // TODO 全局插件无效
   mongoose.plugin(addCreatedAt);
   mongoose.connect(config.mongodb);
 };

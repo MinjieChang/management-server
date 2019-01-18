@@ -70,7 +70,7 @@ class PicturesWall extends React.Component {
 
     // 检测到有登录，可以发表。
     const pathArr = this.state.fileList.map(
-      (item, index) => item.response.picPath,
+      (item, index) => item.response.data.picPath,
     );
 
     this.props.dispatch({

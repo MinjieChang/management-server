@@ -21,6 +21,7 @@ class NormalLoginForm extends React.Component {
       if (!err) {
         // console.log('Received values of form: ', values);
         // 这里使用ajax发送登录请求，如果登录成功，在回调函数中修改全局数据
+        console.log(values, 9788888);
         $.ajax({
           type: 'post',
           url: '/account/login',

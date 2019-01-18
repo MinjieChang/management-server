@@ -39,18 +39,13 @@ app.use(
 
 router(app);
 
-/*
-  为req添加 fileds、files两个属性
-  普通字段挂载到req.fields, 文件挂载到req.files 上
-*/
-// app.use(
-//   expressFormidable({
-//     uploadDir: path.join(__dirname, 'asserts/uploads'),
-//     keepExtensions: true, // 保留后缀
-//   }),
-// );
+app.use(
+  expressFormidable({
+    uploadDir: path.join(__dirname, 'asserts/uploads'),
+    keepExtensions: true,
+  }),
+);
 
-// 错误处理
 app.use((err, req, res, next) => {
   console.error(err, 999999888888);
   if (err instanceof ValidationError) {
