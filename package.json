@@ -20,6 +20,7 @@
     "express": "^4.16.2",
     "express-session": "^1.15.5",
     "formidable": "^1.1.1",
+    "google-libphonenumber": "^3.2.2",
     "joi-password-complexity": "^2.0.1",
     "lodash": "^4.17.11",
     "mongodb": "^2.2.30",

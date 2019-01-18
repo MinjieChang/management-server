@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const { PhoneNumberUtil } = require('google-libphonenumber');
+const { omitBy, isUndefined } = require('lodash');
 const { ERROR_CODE } = require('../constant');
 const { ClientError } = require('./errors');
 
@@ -47,6 +49,18 @@ const assertTruth = ({
 const toObjectId = _id => mongoose.Types.ObjectId(_id);
 const objIdToStr = _id => mongoose.Types.ObjectId(_id).toString();
 
+const phoneValid = phoneStr => {
+  try {
+    const phoneUtil = PhoneNumberUtil.getInstance();
+    const phone = phoneUtil.parse(phoneStr);
+    return phoneUtil.isValidNumber(phone);
+  } catch (err) {
+    return false;
+  }
+};
+
+const removeUndefined = obj => omitBy(obj, isUndefined);
+
 module.exports = {
   createErrorObj,
   castError,
@@ -54,4 +68,6 @@ module.exports = {
   assertTruth,
   toObjectId,
   objIdToStr,
+  phoneValid,
+  removeUndefined,
 };

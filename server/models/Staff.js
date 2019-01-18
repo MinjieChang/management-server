@@ -12,6 +12,9 @@ const staffSchema = new mongoose.Schema({
   age: {
     type: Number,
   },
+  sex: {
+    type: String,
+  },
   department: {
     type: String,
     required: true,
