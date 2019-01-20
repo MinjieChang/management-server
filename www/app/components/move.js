@@ -17,7 +17,7 @@ export const startMove = (obj, json, fn) => {
     let iCur = 0;
     // 处理属性值
     for (var attr in json) {
-      if (attr == "opacity") {
+      if (attr == 'opacity') {
         iCur = parseInt(parseFloat(getStyle(obj, attr)) * 100);
       } else {
         iCur = parseInt(getStyle(obj, attr));
@@ -29,7 +29,7 @@ export const startMove = (obj, json, fn) => {
       if (iCur !== json[attr]) {
         bStop = false;
       }
-      if (attr == "opacity") {
+      if (attr == 'opacity') {
         obj.style[attr] = (iCur + iSpeed) / 100;
         obj.style.filter = `alpha(opacity:${iCur + iSpeed})`;
       } else {

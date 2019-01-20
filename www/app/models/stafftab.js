@@ -25,7 +25,7 @@ export default {
         filter: department,
       };
     },
-    sync_fetchStaffData(state, { staffs }) {
+    sync_fetchStaffData(state, { staffs: {data : staffs} }) {
       return {
         ...state,
         staffs,
@@ -45,9 +45,6 @@ export default {
 
   effects: {
     *init(action, { put }) {
-      // var data = yield fetch("/init").then((res)=>{
-      // 	return res.json();
-      // })
       const department = 'development';
       yield put({ type: 'sync_init', department });
       yield put({ type: 'fetchStaffData' });
@@ -80,17 +77,9 @@ export default {
     *fetchStaffData(action, { put, select }) {
       const filter = yield select(state => state.stafftab.filter);
       const order = yield select(state => state.stafftab.order);
-      const staffs = yield fetch('/staff/staffs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          filter: JSON.stringify(filter),
-          order: JSON.stringify(order),
-        }),
+      const staffs = yield fetch('/staff/getStaffs', {
+        method: 'GET',
       }).then(res => res.json());
-
       // 拉取数据完毕后，再次发送同步请求，更改state数据
       yield put({ type: 'sync_fetchStaffData', staffs });
     },

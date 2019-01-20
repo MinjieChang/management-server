@@ -81,6 +81,7 @@ class ShuoShuo extends React.Component {
   }
 
   render() {
+    console.log('shuoshuo999999');
     const { email, nickname, avata } = this.props.user.user;
     return (
       <div className="stafftabwrap">
