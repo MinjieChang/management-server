@@ -9,7 +9,7 @@ const expressFormidable = require('express-formidable');
 const { ValidationError } = require('express-validation');
 const router = require('./router');
 const connectMongo = require('./models');
-const pkg = require('../package');
+const pkg = require('./package');
 const { ERROR_CODE } = require('./constant');
 
 connectMongo();
@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static('../www'));
+app.use(express.static('../www/dist'));
 
 app.use(
   session({
@@ -47,7 +47,7 @@ app.use(
 );
 
 app.use((err, req, res, next) => {
-  console.error(err, 999999888888);
+  console.error(err, 'middleware error');
   if (err instanceof ValidationError) {
     const errorMessage = err.errors
       .map(({ field, messages }) => `${field.join(',')}: ${messages.join(',')}`)

@@ -8,6 +8,5 @@ exports.pagination = (req, res, next) => {
     pagination.limit = parseInt(query.limit, 10);
   }
   req.query = Object.assign({}, query, pagination);
-  console.log(req.query, 999999);
   next();
 };
