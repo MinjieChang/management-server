@@ -11,11 +11,13 @@ const router = require('./router');
 const connectMongo = require('./models');
 const pkg = require('./package');
 const { ERROR_CODE } = require('./constant');
+const { allowCrossDomain } = require('./middleware/cors');
 
 connectMongo();
 
 const app = express();
 
+app.use(allowCrossDomain);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
