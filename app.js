@@ -12,6 +12,7 @@ const connectMongo = require('./models');
 const pkg = require('./package');
 const { ERROR_CODE } = require('./constant');
 const { allowCrossDomain } = require('./middleware/cors');
+const { logger, error } = require('./middleware/log');
 
 connectMongo();
 
@@ -39,7 +40,12 @@ app.use(
   }),
 );
 
+// 成功请求的日志
+app.use(logger);
+
 router(app);
+
+app.use(error);
 
 app.use(
   expressFormidable({

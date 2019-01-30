@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack",
-    "server": "json-server ./data/data.json -s ./ -p 3000"
+    "start": "node app.js",
+    "hotstart": "supervisor app.js"
   },
   "author": "",
   "license": "ISC",
