@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "hotstart": "supervisor app.js"
+    "hotstart": "supervisor app.js",
+    "test": "mocha test"
   },
   "author": "",
   "license": "ISC",
@@ -15,7 +16,7 @@
     "connect-mongo": "^2.0.3",
     "cookie-parser": "^1.4.3",
     "crypto": "^1.0.1",
-    "express": "^4.16.2",
+    "express": "4.16.2",
     "express-session": "^1.15.5",
     "formidable": "^1.1.1",
     "google-libphonenumber": "^3.2.2",
@@ -67,10 +68,12 @@
     "json-server": "^0.14.2",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
+    "mocha": "^6.0.2",
     "moment": "^2.23.0",
     "objectid-to-timestamp": "^1.3.0",
     "prettier": "^1.15.3",
     "style-loader": "^0.18.2",
+    "supertest": "^3.4.2",
     "supervisor": "^0.12.0",
     "webpack": "^3.4.1",
     "winston": "^3.1.0"
