@@ -18,6 +18,15 @@ staffRouter.get(
   pagination,
   createRouteHandler(({ query }) => staffCtrl.staffs({ ...query })),
 );
+
+// 获取单个员工数据
+staffRouter.get(
+  '/getStaffInfo',
+  validate(staffGet),
+  pagination,
+  createRouteHandler(({ query }) => staffCtrl.getStaffInfoById({ ...query })),
+);
+
 // 修改员工数据
 staffRouter.put(
   '/update/:id',

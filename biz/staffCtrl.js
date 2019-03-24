@@ -18,10 +18,19 @@ exports.staffs = async ({ skip, limit }) => {
   return { staffs };
 };
 
+exports.getStaffInfoById = async ({ id }) => {
+  const staff = await findStaffById(id);
+  assertTruth({
+    value: staff,
+    message: 'staff not fount',
+  });
+  return { staff };
+};
+
 // 修改数据的接口
 exports.changeData = async ({ id, phone, ...rest }) => {
   assertTruth({
-    value: !(phone && !phoneValid(phone)),
+    value: phone && phoneValid(phone),
     errorCode: ERROR_CODE.INVALID_PARAM,
     message: 'phone: invalid format',
   });

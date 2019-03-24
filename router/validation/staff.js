@@ -45,6 +45,7 @@ module.exports = {
     query: {
       skip: joi.number().integer(),
       limit: joi.number().integer(),
+      id: joiObjectId(joi)(),
     },
   },
 };
