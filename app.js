@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const config = require('config-lite')(__dirname);
-const expressFormidable = require('express-formidable');
+// const expressFormidable = require('express-formidable');
 const { ValidationError } = require('express-validation');
 const router = require('./router');
 const connectMongo = require('./models');
@@ -14,16 +14,16 @@ const { ERROR_CODE } = require('./constant');
 const { allowCrossDomain } = require('./middleware/cors');
 const { logger, error } = require('./middleware/log');
 
+const port = process.env.PORT || config.port;
+
 connectMongo();
 
 const app = express();
-
+app.use(express.static(path.join(__dirname, 'dist')));
 app.use(allowCrossDomain);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(express.static('../www/dist'));
 
 app.use(
   session({
@@ -47,12 +47,12 @@ router(app);
 
 app.use(error);
 
-app.use(
-  expressFormidable({
-    uploadDir: path.join(__dirname, 'asserts/uploads'),
-    keepExtensions: true,
-  }),
-);
+// app.use(
+//   expressFormidable({
+//     uploadDir: path.join(__dirname, 'asserts/uploads'),
+//     keepExtensions: true,
+//   }),
+// );
 
 app.use((err, req, res, next) => {
   console.error(err, 'middleware error');
@@ -66,9 +66,14 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-app.listen(8000, err => {
-  if (err) {
-    console.log('开启失败');
-  }
-  console.log(`${pkg.name} port on: 8000`);
-});
+if (module.parent) {
+  // 被require， 则导出app
+  module.exports = app;
+} else {
+  app.listen(port, err => {
+    if (err) {
+      console.log('开启失败');
+    }
+    console.log(`${pkg.name} listening on port: ${port}`);
+  });
+}

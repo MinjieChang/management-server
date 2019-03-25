@@ -7,8 +7,8 @@ node_modules/
 www/*
 
 # Runtime data
-config/*
-!config/default.*
+# config/*
+# !config/default.*
 
 logs/*
 

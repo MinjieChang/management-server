@@ -5,7 +5,7 @@ const communityRouter = require('./community');
 const staffRoter = require('./staff');
 
 module.exports = function router(app) {
-  app.use('/account', accountRouter);
-  app.use('/community', communityRouter);
-  app.use('/staff', staffRoter);
+  app.use('/api/account', accountRouter);
+  app.use('/api/community', communityRouter);
+  app.use('/api/staff', staffRoter);
 };

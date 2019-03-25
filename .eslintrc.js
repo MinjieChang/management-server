@@ -15,6 +15,11 @@ module.exports = {
 
   globals: {
     __DEV__: true,
+    "describe": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "after": true,
+    "it": true
   },
 
   env: {
