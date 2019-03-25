@@ -24,6 +24,14 @@ module.exports = {
       id: joiObjectId(joi)().required(),
     },
   },
+  batchDelete: {
+    body: {
+      staffIds: joi
+        .array()
+        .items(joiObjectId(joi)().required())
+        .required(),
+    },
+  },
   staffUpdate: {
     params: {
       id: joiObjectId(joi)().required(),

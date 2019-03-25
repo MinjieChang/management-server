@@ -24,3 +24,7 @@ exports.getStaffs = (skip, limit) =>
     .skip(skip)
     .limit(limit)
     .exec();
+
+// 批量删除
+exports.batchDeleteStaffsByIds = ids =>
+  Staff.deleteMany({ _id: { $in: ids } }).exec();

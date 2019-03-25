@@ -4,6 +4,7 @@ const {
   findStaffById,
   updateStaffById,
   getStaffs,
+  batchDeleteStaffsByIds,
 } = require('../dao/staff');
 const { assertTruth, phoneValid, removeUndefined } = require('../util');
 const { ERROR_CODE } = require('../constant');
@@ -51,6 +52,19 @@ exports.del = async ({ id }) => {
     message: 'delete staff error',
   });
   return { id: deletedS._id };
+};
+
+// 批量删除
+exports.batchDelByIds = async ({ staffIds }) => {
+  const deletedS = await batchDeleteStaffsByIds(staffIds);
+  assertTruth({
+    value: deletedS,
+    message: 'delete staff error',
+  });
+  const {
+    result: { n, ok },
+  } = deletedS;
+  return { n, ok };
 };
 
 // 添加员工的接口

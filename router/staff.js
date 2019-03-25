@@ -7,6 +7,7 @@ const {
   staffDelete,
   staffUpdate,
   staffGet,
+  batchDelete,
 } = require('./validation/staff');
 const { pagination } = require('../middleware/pagination');
 
@@ -46,6 +47,12 @@ staffRouter.post(
   '/add',
   validate(staffAdd),
   createRouteHandler(({ body }) => staffCtrl.add({ ...body })),
+);
+// 批量删除
+staffRouter.delete(
+  '/batchDelByIds',
+  validate(batchDelete),
+  createRouteHandler(({ body }) => staffCtrl.batchDelByIds({ ...body })),
 );
 
 module.exports = staffRouter;
