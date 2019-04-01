@@ -21,8 +21,8 @@ exports.findStaffById = id => Staff.findById(id).exec();
 
 exports.getStaffs = (skip, limit) =>
   Staff.find()
-    .skip(skip)
     .limit(limit)
+    .skip(skip)
     .exec();
 
 // 批量删除
