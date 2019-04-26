@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const { create, findOneByEmail } = require('../dao/account');
 const { ERROR_CODE } = require('../constant');
 const { assertTruth } = require('../util');
+const getRandomName = require('../util/randomName');
 
 // 验证邮箱是否被注册过
 exports.emailConfirm = async ({ email }) => {
@@ -16,13 +17,7 @@ exports.emailConfirm = async ({ email }) => {
 };
 
 // 注册接口
-exports.register = async ({
-  email,
-  password,
-  confirm,
-  nickname,
-  signature,
-}) => {
+exports.register = async ({ email, password, confirm, nickname, phone }) => {
   const user = await findOneByEmail(email);
   assertTruth({
     value: !user,
@@ -36,20 +31,18 @@ exports.register = async ({
     .createHash('sha256')
     .update(`${password}cmj`)
     .digest('hex');
-
+  const name = nickname || getRandomName();
   const savedUser = await create({
     email,
     password: pwd,
-    name: nickname,
-    signature,
+    name,
+    phone,
   });
   assertTruth({
     value: savedUser && savedUser.email,
     errorMessage: 'server error, please retry later',
   });
-  return {
-    data: savedUser._id,
-  };
+  return { id: savedUser._id };
 };
 
 exports.login = async ({ email, password, session }) => {

@@ -13,6 +13,7 @@ const pkg = require('./package');
 const { ERROR_CODE } = require('./constant');
 const { allowCrossDomain } = require('./middleware/cors');
 const { logger, error } = require('./middleware/log');
+const { checkLogin } = require('./middleware/check.js');
 
 const port = process.env.PORT || config.port;
 
@@ -39,6 +40,7 @@ app.use(
     }),
   }),
 );
+app.use(checkLogin);
 
 // 成功请求的日志
 app.use(logger);

@@ -7,10 +7,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: '我是昵称',
   },
-  signature: {
-    type: String,
-    default: '并没有什么签名',
-  },
   avatar: {
     type: String,
     default: 'images/avatar/avatar.png',
