@@ -3,7 +3,7 @@ const { ERROR_CODE } = require('../constant');
 exports.checkLogin = (req, res, next) => {
   if (!req.session.doLogin) {
     return res.json({
-      errorCode: ERROR_CODE.NOT_FOUND,
+      errorCode: ERROR_CODE.FORBIDDEN,
       errorMessage: 'YOU ARE NOT LOGIN',
     });
   }
@@ -13,7 +13,7 @@ exports.checkLogin = (req, res, next) => {
 exports.checkNotLogin = (req, res, next) => {
   if (req.session.doLogin) {
     return res.json({
-      errorCode: ERROR_CODE.UNKNOWN,
+      errorCode: ERROR_CODE.FORBIDDEN,
       errorMessage: 'YOU ARE LOGIN',
     });
   }

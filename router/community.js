@@ -13,7 +13,7 @@ communityRouter.post(
 );
 // 发表说说
 communityRouter.post(
-  '/submitShuoShuo',
+  '/submitTalk',
   checkLogin,
   validate(addTalks),
   createRouteHandler(({ body, session }) =>

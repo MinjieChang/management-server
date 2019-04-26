@@ -13,6 +13,7 @@ module.exports = {
       // author: joiObjectId(joi)().required(),
       email: joi.string().required(),
       text: joi.string().required(),
+      pathArr: joi.array(),
     },
   },
   getById: {

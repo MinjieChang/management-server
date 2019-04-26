@@ -8,27 +8,30 @@ const {
   removeTalkById,
 } = require('../dao/talk');
 const { assertTruth, toObjectId } = require('../util');
+const logger = require('../util/logger');
 
 // var timeago = require("timeago.js");
 // var gm = require("gm");
 
 // 处理上传的图片
-exports.uploadPic = ({ req }) => {
+const uploadDir = `${process.cwd()}/public/upload/`;
+exports.uploadPic = async ({ req }) => {
+  logger.info('上传文件', req);
   const form = new formidable.IncomingForm();
-  form.uploadDir = '../www/uploads/shuoshuopic';
-  return new Promise(resolve => {
+  form.uploadDir = uploadDir;
+  const result = await new Promise(resolve => {
     form.parse(req, (err, fileds, files) => {
       if (
         files.file.type !== 'image/jpeg' &&
         files.avatar.type !== 'image/png'
       ) {
-        resolve({ data: -1 });
-        return;
+        resolve({ success: 0 });
       }
       const purepath = path.basename(url.parse(files.file.path).pathname);
-      resolve({ result: 1, picPath: purepath });
+      resolve({ success: 1, picPath: purepath });
     });
   });
+  return result;
 };
 
 // 发帖
@@ -60,7 +63,7 @@ exports.init = async () => {
     value: talks,
     message: 'server error',
   });
-  return { data: talks };
+  return { talks };
 };
 
 // 删帖
