@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 const formidable = require('formidable');
 const crypto = require('crypto');
-const { create, findOneByEmail } = require('../dao/account');
+const { create, findOneByEmail, findOneById } = require('../dao/account');
 const { ERROR_CODE } = require('../constant');
 const { assertTruth } = require('../util');
 const getRandomName = require('../util/randomName');
@@ -16,7 +16,6 @@ exports.emailConfirm = async ({ email }) => {
   return { data: true };
 };
 
-// 注册接口
 exports.register = async ({ email, password, confirm, nickname, phone }) => {
   const user = await findOneByEmail(email);
   assertTruth({
@@ -67,23 +66,21 @@ exports.login = async ({ email, password, session }) => {
   session.doLogin = true;
   session.email = email;
   session.user = doc;
-  return { user: { avatar, email, name, signature, _id } };
-};
-
-// 每次请求都会携带session
-exports.refresh = async ({ session }) => {
-  const { email } = session;
-  const user = await findOneByEmail(email);
-  assertTruth({
-    value: user && user.email,
-    errorCode: ERROR_CODE.FORBIDDEN,
-    errorMessage: 'forbidden',
-  });
-  return { data: true, user };
+  return { avatar, email, name, signature, _id };
 };
 
 // 退出
-exports.logOut = ({ session }) => {
+exports.logout = ({ session }) => {
   session.doLogin = false;
-  return { data: true };
+  return true;
+};
+
+exports.getAccountInfo = async ({ id }) => {
+  const user = await findOneById(id);
+  assertTruth({
+    value: user,
+    message: 'user not found',
+  });
+  const { avatar, name, signature, _id, email } = user;
+  return { avatar, email, name, signature, _id };
 };

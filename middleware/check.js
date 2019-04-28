@@ -1,6 +1,7 @@
 const { ERROR_CODE } = require('../constant');
 
 exports.checkLogin = (req, res, next) => {
+  console.log(req.session, 999999999);
   if (!req.session.doLogin) {
     return res.json({
       errorCode: ERROR_CODE.FORBIDDEN,

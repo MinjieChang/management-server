@@ -26,15 +26,9 @@ accountRouter.post(
   ),
 );
 // 退出
-accountRouter.get(
-  '/logOut',
-  createRouteHandler(({ session }) => accountCtrl.logOut({ session })),
-);
-// 退出后刷新页面
-accountRouter.get(
-  '/refresh',
-  checkLogin,
-  createRouteHandler(({ session }) => accountCtrl.refresh({ session })),
+accountRouter.post(
+  '/logout',
+  createRouteHandler(({ session }) => accountCtrl.logout({ session })),
 );
 // 邮箱验证
 accountRouter.patch(
@@ -42,6 +36,11 @@ accountRouter.patch(
   createRouteHandler(({ body: { email } }) =>
     accountCtrl.emailConfirm({ email }),
   ),
+);
+// 获取用户信息
+accountRouter.get(
+  '/accountInfo',
+  createRouteHandler(({ query: { id } }) => accountCtrl.getAccountInfo({ id })),
 );
 
 module.exports = accountRouter;

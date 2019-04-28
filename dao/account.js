@@ -6,3 +6,5 @@ exports.create = user => {
 };
 
 exports.findOneByEmail = email => User.findOne({ email }).exec();
+
+exports.findOneById = id => User.findById(id).exec();

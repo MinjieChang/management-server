@@ -40,7 +40,7 @@ app.use(
     }),
   }),
 );
-app.use(checkLogin);
+// app.use(checkLogin);
 
 // 成功请求的日志
 app.use(logger);
