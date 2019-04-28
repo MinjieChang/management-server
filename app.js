@@ -21,6 +21,7 @@ connectMongo();
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(allowCrossDomain);
 app.use(cookieParser());
 app.use(bodyParser.json());

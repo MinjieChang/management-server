@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const { create, findOneByEmail, findOneById } = require('../dao/account');
 const { ERROR_CODE } = require('../constant');
 const { assertTruth } = require('../util');
-const getRandomName = require('../util/randomName');
+const { getRandomName, getRandomAvatar } = require('../util/random');
 
 // 验证邮箱是否被注册过
 exports.emailConfirm = async ({ email }) => {
@@ -31,11 +31,13 @@ exports.register = async ({ email, password, confirm, nickname, phone }) => {
     .update(`${password}cmj`)
     .digest('hex');
   const name = nickname || getRandomName();
+  const avatar = getRandomAvatar();
   const savedUser = await create({
     email,
     password: pwd,
     name,
     phone,
+    avatar,
   });
   assertTruth({
     value: savedUser && savedUser.email,

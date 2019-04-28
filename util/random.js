@@ -1,4 +1,6 @@
 /* eslint-disable import/prefer-default-export */
+const fs = require('fs');
+
 const names = [
   '乔治·伍德',
   '阿尔玛理查兹',
@@ -107,6 +109,12 @@ const names = [
   '德文多萝西',
 ];
 
-module.exports = function getRandomName() {
+exports.getRandomName = function getRandomName() {
   return names[Math.floor(Math.random() * names.length)];
+};
+
+exports.getRandomAvatar = function getRandomAvatar() {
+  const path = `${process.cwd()}/public/avatar`;
+  const files = fs.readdirSync(path).slice(1);
+  return files[Math.floor(Math.random() * files.length)];
 };
