@@ -5,10 +5,15 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   name: {
     type: String,
-    default: '我是昵称',
+  },
+  phone: {
+    type: Number,
   },
   avatar: {
     type: String,
+  },
+  isVip: {
+    type: Boolean,
   },
 });
 

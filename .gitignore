@@ -5,6 +5,7 @@ node_modules/
 
 # Compiled output
 dist/*
+public/*
 
 # Runtime data
 # config/*

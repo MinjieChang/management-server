@@ -3,7 +3,7 @@ const formidable = require('formidable');
 const crypto = require('crypto');
 const { create, findOneByEmail, findOneById } = require('../dao/account');
 const { ERROR_CODE } = require('../constant');
-const { assertTruth } = require('../util');
+const { assertTruth, removeFalsy } = require('../util');
 const { getRandomName, getRandomAvatar } = require('../util/random');
 
 // 验证邮箱是否被注册过
@@ -16,6 +16,7 @@ exports.emailConfirm = async ({ email }) => {
   return { data: true };
 };
 
+const vipEmails = ['88888888@qq.com'];
 exports.register = async ({ email, password, confirm, nickname, phone }) => {
   const user = await findOneByEmail(email);
   assertTruth({
@@ -38,6 +39,7 @@ exports.register = async ({ email, password, confirm, nickname, phone }) => {
     name,
     phone,
     avatar,
+    isVip: vipEmails.includes(email),
   });
   assertTruth({
     value: savedUser && savedUser.email,
@@ -57,7 +59,7 @@ exports.login = async ({ email, password, session }) => {
     .update(`${password}cmj`)
     .digest('hex'); // 加密密码
 
-  const { password: dbPwd, avatar, name, signature, _id } = doc;
+  const { password: dbPwd, avatar, name, signature, _id, isVip } = doc;
 
   assertTruth({
     value: pwd === dbPwd,
@@ -68,7 +70,7 @@ exports.login = async ({ email, password, session }) => {
   session.doLogin = true;
   session.email = email;
   session.user = doc;
-  return { avatar, email, name, signature, _id };
+  return removeFalsy({ avatar, email, name, signature, _id, isVip });
 };
 
 // 退出
@@ -83,6 +85,6 @@ exports.getAccountInfo = async ({ id }) => {
     value: user,
     message: 'user not found',
   });
-  const { avatar, name, signature, _id, email } = user;
-  return { avatar, email, name, signature, _id };
+  const { avatar, name, signature, _id, email, isVip } = user;
+  return removeFalsy({ avatar, email, name, signature, _id, isVip });
 };

@@ -12,6 +12,7 @@ const connectMongo = require('./models');
 const pkg = require('./package');
 const { ERROR_CODE } = require('./constant');
 const { allowCrossDomain } = require('./middleware/cors');
+const { pagination } = require('./middleware/pagination');
 const { logger, error } = require('./middleware/log');
 const { checkLogin } = require('./middleware/check.js');
 
@@ -23,6 +24,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(allowCrossDomain);
+app.use(pagination);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,7 +46,7 @@ app.use(
 // app.use(checkLogin);
 
 // 成功请求的日志
-app.use(logger);
+// app.use(logger);
 
 router(app);
 

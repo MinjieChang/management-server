@@ -1,10 +1,10 @@
 const fs = require('fs');
-const path = require('path');
 const mongoose = require('mongoose');
 const { PhoneNumberUtil } = require('google-libphonenumber');
 const { omitBy, isUndefined } = require('lodash');
 const { ERROR_CODE } = require('../constant');
 const { ClientError } = require('./errors');
+const logger = require('./logger');
 
 const createErrorObj = (errorCode, errorMessage) => ({
   errorCode,
@@ -62,25 +62,23 @@ const phoneValid = phoneStr => {
 };
 
 const removeUndefined = obj => omitBy(obj, isUndefined);
+
+const removeFalsy = obj =>
+  omitBy(obj, v => v === null || v === '' || v === [] || v === false);
+
 const removeFiles = files => {
   files.forEach(file => {
     if (fs.statSync(file).isFile()) {
-      fs.unlink(file, err => {
-        if (err) {
-          throw err;
-        }
-      });
+      try {
+        fs.unlinkSync(file);
+      } catch (error) {
+        logger.info(
+          `remove file false error is: ${error.message}, file is: ${file}`,
+        );
+      }
     }
   });
 };
-const pathArr = [
-  'upload_39cee1fc3b112e1212982cf9d62c018d',
-  'upload_e22681243f78b1cf889b31ae06217f75',
-];
-const pwd = path.join(__dirname, '../public/upload');
-const paths = pathArr.map(filename => `${pwd}/${filename}`);
-console.log(paths, 99999);
-removeFiles(paths);
 
 module.exports = {
   createErrorObj,
@@ -91,5 +89,6 @@ module.exports = {
   objIdToStr,
   phoneValid,
   removeUndefined,
+  removeFalsy,
   removeFiles,
 };

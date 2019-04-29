@@ -16,12 +16,13 @@ communityRouter.post(
   '/submitTalk',
   checkLogin,
   validate(addTalks),
-  createRouteHandler(({ body, session }) =>
-    communityCtrl.submitShuoShuo({ ...body, ...session }),
-  ),
+  createRouteHandler(({ body }) => communityCtrl.submitShuoShuo({ ...body })),
 );
 // 初始获取说说
-communityRouter.get('/init', createRouteHandler(() => communityCtrl.init()));
+communityRouter.get(
+  '/init',
+  createRouteHandler(({ query }) => communityCtrl.init({ query })),
+);
 
 // 通过id获取
 communityRouter.get(
@@ -32,10 +33,12 @@ communityRouter.get(
   ),
 );
 // 删除说说
-communityRouter.post(
+communityRouter.delete(
   '/removeTalk',
   validate(removeById),
-  createRouteHandler(({ body: { id } }) => communityCtrl.removeTalk({ id })),
+  createRouteHandler(({ body: { id, pathArr } }) =>
+    communityCtrl.removeTalk({ id, pathArr }),
+  ),
 );
 
 module.exports = communityRouter;

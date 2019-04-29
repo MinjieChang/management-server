@@ -1,13 +1,14 @@
 const formidable = require('formidable');
 const url = require('url');
 const path = require('path');
+const compact = require('lodash/compact');
 const {
   createTalk,
   getTalkByAuthorId,
   getTalks,
   removeTalkById,
 } = require('../dao/talk');
-const { assertTruth, toObjectId } = require('../util');
+const { assertTruth, removeUndefined, removeFiles } = require('../util');
 const logger = require('../util/logger');
 
 // var timeago = require("timeago.js");
@@ -35,9 +36,9 @@ exports.uploadPic = async ({ req }) => {
 };
 
 // 发帖
-exports.submitShuoShuo = async ({ text, user, pathArr }) => {
+exports.submitShuoShuo = async ({ text, userId, pathArr }) => {
   const savedTalk = await createTalk({
-    author: user._id,
+    author: userId,
     text,
     pathArr,
   });
@@ -57,8 +58,11 @@ exports.getTalksByAuthorId = async ({ authorId }) => {
   return { data: talks };
 };
 
-exports.init = async () => {
-  const talks = await getTalks();
+exports.init = async ({ query: { skip, limit, ...rest } }) => {
+  const match = removeUndefined({
+    author: rest.author,
+  });
+  const talks = await getTalks({ skip, limit, match });
   assertTruth({
     value: talks,
     message: 'server error',
@@ -67,8 +71,15 @@ exports.init = async () => {
 };
 
 // 删帖
-exports.removeTalk = async ({ id }) => {
+exports.removeTalk = async ({ id, pathArr }) => {
   const removedTalk = await removeTalkById(id);
+  logger.info(`to removed files is: ${pathArr}`);
+  if (pathArr && pathArr.length) {
+    const pwd = path.join(__dirname, '../public/upload');
+    const paths = compact(pathArr).map(filename => `${pwd}/${filename}`);
+    logger.info(`to removed paths is: ${paths}`);
+    removeFiles(paths);
+  }
   assertTruth({
     value: removedTalk,
     message: 'db error remove failed',

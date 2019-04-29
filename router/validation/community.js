@@ -11,19 +11,20 @@ module.exports = {
   addTalks: {
     body: {
       // author: joiObjectId(joi)().required(),
-      email: joi.string().required(),
+      userId: joiObjectId(joi)().required(),
       text: joi.string().required(),
       pathArr: joi.array(),
     },
   },
   getById: {
     query: {
-      authorId: joiObjectId(joi)().required(),
+      userId: joiObjectId(joi)().required(),
     },
   },
   removeById: {
     body: {
       id: joiObjectId(joi)().required(),
+      pathArr: joi.array(),
     },
   },
 };
