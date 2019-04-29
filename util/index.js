@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const mongoose = require('mongoose');
 const { PhoneNumberUtil } = require('google-libphonenumber');
 const { omitBy, isUndefined } = require('lodash');
@@ -16,7 +18,7 @@ const castError = (error = {}) => {
   return createErrorObj(error.errorCode, error.errorMessage);
 };
 
-const createRouteHandler = fn => async (req, res, next) => {
+const createRouteHandler = fn => async (req, res) => {
   const { query, body, params, session, files, fileds } = req;
   try {
     const result = await fn({
@@ -60,6 +62,25 @@ const phoneValid = phoneStr => {
 };
 
 const removeUndefined = obj => omitBy(obj, isUndefined);
+const removeFiles = files => {
+  files.forEach(file => {
+    if (fs.statSync(file).isFile()) {
+      fs.unlink(file, err => {
+        if (err) {
+          throw err;
+        }
+      });
+    }
+  });
+};
+const pathArr = [
+  'upload_39cee1fc3b112e1212982cf9d62c018d',
+  'upload_e22681243f78b1cf889b31ae06217f75',
+];
+const pwd = path.join(__dirname, '../public/upload');
+const paths = pathArr.map(filename => `${pwd}/${filename}`);
+console.log(paths, 99999);
+removeFiles(paths);
 
 module.exports = {
   createErrorObj,
@@ -70,4 +91,5 @@ module.exports = {
   objIdToStr,
   phoneValid,
   removeUndefined,
+  removeFiles,
 };
