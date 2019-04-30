@@ -21,8 +21,18 @@ const port = process.env.PORT || config.port;
 connectMongo();
 
 const app = express();
-app.use(express.static(path.join(__dirname, 'dist')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, './dist')));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use((req, res, next) => {
+  if (
+    req.method === 'GET' &&
+    req.accepts('html') &&
+    !req.is('json') &&
+    !req.path.includes('.')
+  ) {
+    res.sendFile(path.resolve(__dirname, './dist', 'index.html'));
+  } else next();
+});
 app.use(allowCrossDomain);
 app.use(pagination);
 app.use(cookieParser());
@@ -46,10 +56,11 @@ app.use(
 // app.use(checkLogin);
 
 // 成功请求的日志
-// app.use(logger);
-
+app.use(logger);
 router(app);
-
+// app.get('*', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, './dist', 'index.html'));
+// });
 app.use(error);
 
 // app.use(

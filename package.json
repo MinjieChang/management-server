@@ -1,8 +1,11 @@
 {
   "name": "management-cmj",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "engines": {
+    "node": "11.8.0",
+    "npm": "6.5.0"
+  },
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "hotstart": "supervisor app.js",
