@@ -4,8 +4,8 @@
 node_modules/
 
 # Compiled output
-dist/*
-public/*
+# dist/*
+# public/*
 
 # Runtime data
 # config/*

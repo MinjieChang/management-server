@@ -22,17 +22,17 @@ connectMongo();
 
 const app = express();
 app.use(express.static(path.join(__dirname, './dist')));
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use((req, res, next) => {
-  if (
-    req.method === 'GET' &&
-    req.accepts('html') &&
-    !req.is('json') &&
-    !req.path.includes('.')
-  ) {
-    res.sendFile(path.resolve(__dirname, './dist', 'index.html'));
-  } else next();
-});
+app.use(express.static(path.join(__dirname, './public')));
+// app.use((req, res, next) => {
+//   if (
+//     req.method === 'GET' &&
+//     req.accepts('html') &&
+//     !req.is('json') &&
+//     !req.path.includes('.')
+//   ) {
+//     res.sendFile(path.resolve(__dirname, './dist', 'index.html'));
+//   } else next();
+// });
 app.use(allowCrossDomain);
 app.use(pagination);
 app.use(cookieParser());
@@ -58,17 +58,10 @@ app.use(
 // 成功请求的日志
 app.use(logger);
 router(app);
-// app.get('*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, './dist', 'index.html'));
-// });
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './dist', 'index.html'));
+});
 app.use(error);
-
-// app.use(
-//   expressFormidable({
-//     uploadDir: path.join(__dirname, 'asserts/uploads'),
-//     keepExtensions: true,
-//   }),
-// );
 
 app.use((err, req, res, next) => {
   console.error(err, 'middleware error');
