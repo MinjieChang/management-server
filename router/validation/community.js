@@ -27,4 +27,18 @@ module.exports = {
       pathArr: joi.array(),
     },
   },
+  collectTalk: {
+    body: {
+      talkId: joiObjectId(joi)().required(),
+      accountId: joiObjectId(joi)().required(),
+      status: joi.boolean(),
+    },
+  },
+  likeTalk: {
+    body: {
+      talkId: joiObjectId(joi)().required(),
+      accountId: joiObjectId(joi)().required(),
+      status: joi.boolean(),
+    },
+  },
 };

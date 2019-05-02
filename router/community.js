@@ -2,7 +2,13 @@ const validate = require('express-validation');
 const express = require('express');
 const communityCtrl = require('../biz/communityCtrl');
 const { checkLogin } = require('../middleware/check.js');
-const { addTalks, getById, removeById } = require('./validation/community');
+const {
+  addTalks,
+  getById,
+  removeById,
+  collectTalk,
+  likeTalk,
+} = require('./validation/community');
 const { createRouteHandler } = require('../util');
 
 const communityRouter = new express.Router();
@@ -39,6 +45,19 @@ communityRouter.delete(
   createRouteHandler(({ body: { id, pathArr } }) =>
     communityCtrl.removeTalk({ id, pathArr }),
   ),
+);
+// 收藏
+communityRouter.post(
+  '/collectTalk',
+  validate(collectTalk),
+  createRouteHandler(({ body }) => communityCtrl.collectTalk({ ...body })),
+);
+
+// 点赞
+communityRouter.post(
+  '/likeTalk',
+  validate(likeTalk),
+  createRouteHandler(({ body }) => communityCtrl.likeTalk({ ...body })),
 );
 
 module.exports = communityRouter;

@@ -12,6 +12,8 @@ const talkSchema = new mongoose.Schema(
       type: Array,
     },
     pv: { type: Number, default: 0 },
+    collectors: [{ type: String }],
+    likers: [{ type: String }],
   },
   {
     timestamps: true,

@@ -56,7 +56,7 @@ app.use(
 // app.use(checkLogin);
 
 // 成功请求的日志
-app.use(logger);
+// app.use(logger);
 router(app);
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, './dist', 'index.html'));

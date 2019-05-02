@@ -7,6 +7,8 @@ const {
   getTalkByAuthorId,
   getTalks,
   removeTalkById,
+  collectTalkById,
+  likeTalkById,
 } = require('../dao/talk');
 const { assertTruth, removeUndefined, removeFiles } = require('../util');
 const logger = require('../util/logger');
@@ -58,11 +60,11 @@ exports.getTalksByAuthorId = async ({ authorId }) => {
   return { data: talks };
 };
 
-exports.init = async ({ query: { skip, limit, ...rest } }) => {
+exports.init = async ({ query: { accountId, skip, limit, ...rest } }) => {
   const match = removeUndefined({
     author: rest.author,
   });
-  const talks = await getTalks({ skip, limit, match });
+  const talks = await getTalks({ accountId, skip, limit, match });
   assertTruth({
     value: talks,
     message: 'server error',
@@ -85,4 +87,32 @@ exports.removeTalk = async ({ id, pathArr }) => {
     message: 'db error remove failed',
   });
   return { id: removedTalk._id };
+};
+
+// 收藏
+exports.collectTalk = async ({ accountId, talkId, status }) => {
+  logger.info(
+    `collect talk accountId:${accountId}, talkId:${talkId}, status:${status}`,
+  );
+  const query = await collectTalkById({ accountId, talkId, status });
+  assertTruth({
+    value: query,
+    message: 'db error, collect talk failed',
+  });
+  const { ok } = query;
+  return { ok };
+};
+
+// 点赞
+exports.likeTalk = async ({ accountId, talkId, status }) => {
+  logger.info(
+    `like talk accountId:${accountId}, talkId:${talkId}, status:${status}`,
+  );
+  const query = await likeTalkById({ accountId, talkId, status });
+  assertTruth({
+    value: query,
+    message: 'db error, like talk failed',
+  });
+  const { ok } = query;
+  return { ok };
 };
