@@ -12972,6 +12972,61 @@ li {
     opacity: 0;
   }
 }
+.PerComment-commentAvatar-3J6Vu {
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+  margin-right: 10px;
+}
+.index-root-2P8KZ {
+  padding: 15px 20px;
+  background-color: #f2f2f5;
+  margin: 0 -10px;
+  margin-bottom: -10px;
+  margin-top: 5px;
+  position: relative;
+}
+.index-root-2P8KZ::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 49%;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #f2f2f5;
+}
+.index-commentAvatar-1rMm0 {
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+  margin-right: 10px;
+}
+.index-commentBtn-32PU7 {
+  width: 40px;
+  padding: 4px 10px;
+  font-size: 12px;
+  background-color: #ff8140;
+  border: 1px solid #ff8140;
+  color: #fff;
+  border-radius: 2px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.index-commentBtn-32PU7:hover {
+  background-color: #f77c3d;
+}
+.index-input-33alO {
+  outline: none;
+  height: 28px;
+  padding: 5px 2px 5px 6px;
+  border: 1px solid #ccc;
+}
+.index-input-33alO:focus {
+  border: 1px solid #eb7350;
+}
 h5,
 h6,
 ul,
@@ -13257,6 +13312,7 @@ li {
   width: 600px;
   padding: 10px;
   box-sizing: content-box;
+  overflow: hidden;
 }
 .index-container-37Ldo {
   display: flex;
@@ -13900,6 +13956,9 @@ div {
 }
 
 /* 字体 */
+.fontSize12 {
+    font-size: 12px
+}
 .fontSize20 {
     font-size: 20px
 }
@@ -13917,4 +13976,4 @@ div {
 .textAlignCenter {
     text-align: center
 }
-/*# sourceMappingURL=app.64afe.css.map*/
+/*# sourceMappingURL=app.8ff57.css.map*/

@@ -1,5 +1,6 @@
 const Talk = require('../models/Talk');
 const User = require('../models/User');
+const Comment = require('../models/Comment');
 
 exports.createTalk = talk => {
   const u = new Talk(talk).save();
@@ -9,11 +10,10 @@ exports.createTalk = talk => {
 // 通过id获取
 exports.getTalkById = id => Talk.findById(id).exec();
 
-// 通过author获取
-exports.getTalkByAuthorId = id => Talk.find({ author: id }).exec();
+// 通过talk获取
+exports.getTalkByAuthorId = id => Talk.findById(id).exec();
 
 // 获取所有
-// exports.getTalks = () => Talk.find().exec();
 exports.getTalks = ({ accountId, skip, limit, match }) =>
   Talk.aggregate()
     .match(match)
@@ -27,6 +27,13 @@ exports.getTalks = ({ accountId, skip, limit, match }) =>
       as: 'author',
     })
     .addFields({ author: { $arrayElemAt: ['$author', 0] } })
+    .lookup({
+      from: Comment.collection.collectionName,
+      localField: '_id',
+      foreignField: 'talkId',
+      as: 'commentsAmount',
+    })
+    .addFields({ commentsAmount: { $size: '$commentsAmount' } })
     .addFields({
       liked: {
         $filter: {

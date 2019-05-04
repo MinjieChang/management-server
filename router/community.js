@@ -8,6 +8,10 @@ const {
   removeById,
   collectTalk,
   likeTalk,
+  commentTalk,
+  getTalkComments,
+  replyComment,
+  getReplys,
 } = require('./validation/community');
 const { createRouteHandler } = require('../util');
 
@@ -32,11 +36,9 @@ communityRouter.get(
 
 // 通过id获取
 communityRouter.get(
-  '/getTalksById',
+  '/getTalkById',
   validate(getById),
-  createRouteHandler(({ query: { authorId } }) =>
-    communityCtrl.getTalksByAuthorId({ authorId }),
-  ),
+  createRouteHandler(({ query: { id } }) => communityCtrl.getTalkById({ id })),
 );
 // 删除说说
 communityRouter.delete(
@@ -58,6 +60,36 @@ communityRouter.post(
   '/likeTalk',
   validate(likeTalk),
   createRouteHandler(({ body }) => communityCtrl.likeTalk({ ...body })),
+);
+
+// 评论
+communityRouter.post(
+  '/commentTalk',
+  validate(commentTalk),
+  createRouteHandler(({ body }) => communityCtrl.commentTalk({ ...body })),
+);
+
+// 获取评论
+communityRouter.get(
+  '/getTalkComments',
+  validate(getTalkComments),
+  createRouteHandler(({ query }) =>
+    communityCtrl.getTalkComments({ ...query }),
+  ),
+);
+
+// 回复评论
+communityRouter.post(
+  '/replyComment',
+  validate(replyComment),
+  createRouteHandler(({ body }) => communityCtrl.replyComment({ ...body })),
+);
+
+// 获取评论下的回复
+communityRouter.get(
+  '/getReplys',
+  validate(getReplys),
+  createRouteHandler(({ query }) => communityCtrl.getReplys({ ...query })),
 );
 
 module.exports = communityRouter;

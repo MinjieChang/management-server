@@ -4,12 +4,19 @@ const path = require('path');
 const compact = require('lodash/compact');
 const {
   createTalk,
-  getTalkByAuthorId,
+  getTalkById,
   getTalks,
   removeTalkById,
   collectTalkById,
   likeTalkById,
 } = require('../dao/talk');
+const {
+  createComment,
+  findCommentsByTalkId,
+  findCommentById,
+} = require('../dao/comment');
+const { createReply, findReplysByCommentId } = require('../dao/reply');
+const { findOneById } = require('../dao/account');
 const { assertTruth, removeUndefined, removeFiles } = require('../util');
 const logger = require('../util/logger');
 
@@ -51,13 +58,13 @@ exports.submitShuoShuo = async ({ text, userId, pathArr }) => {
   return { id: savedTalk._id };
 };
 
-exports.getTalksByAuthorId = async ({ authorId }) => {
-  const talks = await getTalkByAuthorId(authorId);
+exports.getTalkById = async ({ id }) => {
+  const talk = await getTalkById(id);
   assertTruth({
-    value: talks,
+    value: talk,
     message: 'db read error',
   });
-  return { data: talks };
+  return { talk };
 };
 
 exports.init = async ({ query: { accountId, skip, limit, ...rest } }) => {
@@ -115,4 +122,71 @@ exports.likeTalk = async ({ accountId, talkId, status }) => {
   });
   const { ok } = query;
   return { ok };
+};
+
+// 评论
+exports.commentTalk = async ({ talkId, commenterId, content }) => {
+  logger.info(
+    `commentTalk talkId is:${talkId}, commenterId is ${commenterId}, content is ${content}`,
+  );
+  const comment = await createComment({ talkId, commenterId, content });
+  assertTruth({
+    value: comment,
+    message: 'db error, create comment failed',
+  });
+  const { _id } = comment;
+  return { _id };
+};
+
+// 获取评论
+exports.getTalkComments = async ({ talkId }) => {
+  logger.info(`getTalkComments talkId is:${talkId}`);
+  const comments = await findCommentsByTalkId(talkId);
+  assertTruth({
+    value: comments,
+    message: 'db error, find comments failed',
+  });
+  return { comments };
+};
+
+// 回复评论
+exports.replyComment = async ({
+  talkId,
+  commentId,
+  accountId,
+  beReplierId,
+  replyContent,
+}) => {
+  logger.info(`replyComment commentId is:${commentId}`);
+  // 判断有无此评论
+  const comment = await findCommentById(commentId);
+  assertTruth({
+    value: comment,
+    message: 'db error, find comment failed',
+  });
+  const result = await createReply({
+    talkId,
+    commentId,
+    accountId,
+    beReplierId,
+    replyContent,
+  });
+  assertTruth({
+    value: result,
+    message: 'db error, update replys failed',
+  });
+  console.log(result, 'result+++++++');
+  const { _id } = result;
+  return _id;
+};
+
+// 获取评论下的回复
+exports.getReplys = async ({ commentId }) => {
+  const replys = await findReplysByCommentId(commentId);
+  assertTruth({
+    value: replys,
+    message: 'db error, find replys failed',
+  });
+  console.log(replys);
+  return replys;
 };

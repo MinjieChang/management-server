@@ -23,6 +23,7 @@ exports.getStaffs = (skip, limit) =>
   Staff.find()
     .limit(limit)
     .skip(skip)
+    .sort({ createdAt: -1 })
     .exec();
 
 // 批量删除

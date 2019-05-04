@@ -18,7 +18,7 @@ module.exports = {
   },
   getById: {
     query: {
-      userId: joiObjectId(joi)().required(),
+      id: joiObjectId(joi)().required(),
     },
   },
   removeById: {
@@ -39,6 +39,32 @@ module.exports = {
       talkId: joiObjectId(joi)().required(),
       accountId: joiObjectId(joi)().required(),
       status: joi.boolean(),
+    },
+  },
+  commentTalk: {
+    body: {
+      talkId: joiObjectId(joi)().required(),
+      commenterId: joiObjectId(joi)().required(),
+      content: joi.string().required(),
+    },
+  },
+  getTalkComments: {
+    query: {
+      talkId: joiObjectId(joi)().required(),
+    },
+  },
+  replyComment: {
+    body: {
+      talkId: joiObjectId(joi)().required(),
+      commentId: joiObjectId(joi)().required(),
+      accountId: joiObjectId(joi)().required(),
+      beReplierId: joiObjectId(joi)().required(),
+      replyContent: joi.string().required(),
+    },
+  },
+  getReplys: {
+    query: {
+      commentId: joiObjectId(joi)().required(),
     },
   },
 };
